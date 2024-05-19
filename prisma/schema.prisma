@@ -36,6 +36,8 @@ model Song {
   artistId  Int
   artist    Artist             @relation(fields: [artistId], references: [id], name: "ArtistSongs")
   playlists SongsOnPlaylists[]
+  ratings   Rating[]
+  reviews   Review[]
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
 }
@@ -59,6 +61,30 @@ model SongsOnPlaylists {
   @@id([songId, playlistId])
 }
 
+model Rating {
+  id        Int      @id @default(autoincrement())
+  value     Int // 1 to 5 star rating
+  songId    Int
+  song      Song     @relation(fields: [songId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([songId, userId])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  text      String
+  songId    Int
+  song      Song     @relation(fields: [songId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // next auth
 
 model User {
@@ -71,9 +97,10 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  ratings       Rating[]
+  reviews       Review[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 model Account {
