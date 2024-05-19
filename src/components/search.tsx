@@ -1,6 +1,8 @@
 "use client";
+import { formatDuration } from "@/lib/utils";
 import { type Song } from "@prisma/client";
-import { Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export const Search = () => {
@@ -52,9 +54,24 @@ export const Search = () => {
             songs.map((song) => (
               <div
                 key={song.id}
-                className="border border-gray-500 rounded-md p-2"
+                className="hover:bg-gray-800 hover:duration-300"
               >
-                <b>{song.title}</b>
+                <Link href={`/song/${song.id}`}>
+                  <div className="border border-gray-500 rounded-md p-3 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={song.image}
+                        alt={song.title}
+                        className="w-16 h-16 rounded-md object-cover"
+                      />
+                      <div>
+                        <h3 className="text-lg font-bold">{song.title}</h3>
+                        <p>duration: {formatDuration(song.duration)}</p>
+                      </div>
+                    </div>
+                    <ArrowRight />
+                  </div>
+                </Link>
               </div>
             ))
           ) : (
