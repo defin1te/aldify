@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { db } from "@/db";
 
 export const Songs = async () => {
@@ -8,9 +9,13 @@ export const Songs = async () => {
       <h2 className="text-2xl font-bold">Songs</h2>
       {songs &&
         songs.map((song) => (
-          <div key={song.id} className="border rounded-md p-3">
-            <h3>song: {song.title}</h3>
-            <p>duration: {song.duration / 60} minutes.</p>
+          <div key={song.id} className="hover:bg-gray-800 hover:duration-300">
+            <Link href={`/song/${song.id}`}>
+              <div className="border rounded-md p-3">
+                <h3>song: {song.title}</h3>
+                <p>duration: {song.duration / 60} minutes.</p>
+              </div>
+            </Link>
           </div>
         ))}
     </div>
